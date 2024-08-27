@@ -1,0 +1,39 @@
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  image: node:20.12.1-buster-slim
+  cache:
+    paths:
+      - react/node_modules/
+  script:
+    - rm -rf public
+    - cd react
+    - npm install
+    - npm run build
+    - cp build/index.html build/404.html
+    - mv build ../public
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
+
+executable:
+  stage: deploy
+  image: node:20.12.1-buster-slim
+  cache:
+    paths:
+      - node_modules/
+  script:
+    - apt-get update
+    - apt-get -y install curl make gcc g++ binutils-gold python paxctl
+    - rm -rf nexe
+    - npm install
+    - npm run build-gm
+  artifacts:
+    paths:
+      - nexe
+  only:
+    - not-working-wip-nexe-master

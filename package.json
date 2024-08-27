@@ -1,0 +1,36 @@
+{
+  "name": "gothic-together-gamemode",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "concurrently \"npm run react\" \"npm run watch-gm\"",
+    "react": "cd react & npm start",
+    "start-gm": "cross-env APP_ENV=development tsx ./server.ts",
+    "watch-gm": "nodemon --watch src -e js,ts,json --exec \"npm run start-gm\"",
+    "build-gm": "node ./esbuild.config.cjs && nexe -r .env.production -i ./tmp/app-bundle.cjs -t x64-14.15.3 -o nexe/gamemode.exe",
+    "start-gm-prod": "tsx ./server.ts",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.20.2",
+    "eslint": "^8.57.0",
+    "nodemon": "^3.0.3",
+    "prettier": "3.2.5",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "devalue": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "dotenv-expand": "^11.0.6",
+    "gothic-together": "0.1.35",
+    "nexe": "^4.0.0-rc.4",
+    "superjson": "^2.2.1",
+    "tsx": "^4.7.3",
+    "zustand": "^4.5.2"
+  }
+}
