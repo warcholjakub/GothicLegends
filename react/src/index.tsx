@@ -8,6 +8,7 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import EquipmentPage from './Equipment'
 import HeroPage from './Hero'
 import Creator from './Creator'
+import Login from './Login'
 import { WebBrowserWrapper } from './components/WebBrowserWrapper'
 
 const isWebBrowser = ConfigureBrowserIfNotInsideGame()
@@ -22,6 +23,7 @@ root.render(
         <Route path="/eq" element={<EquipmentPage />} />
         <Route path="/stats" element={<Stats />} />
         <Route path="/creator" element={<Creator />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   </WebBrowserWrapper>,

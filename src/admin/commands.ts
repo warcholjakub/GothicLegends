@@ -1,8 +1,7 @@
 import { NPC_ATR_HITPOINTS, NPC_ATR_HITPOINTSMAX } from 'gothic-together/union/enums'
 import { MyPlayer as Player } from 'src/player.js'
-import { GameMode } from 'src/gamemode.js'
+import { GameMode, REACT_BASE_URL } from 'src/gamemode.js'
 import { Client, zVEC3 } from 'gothic-together'
-import { RestartGamemode } from 'src/utils/restart-gamemode.js'
 
 const Op = (player: Player, args: any, gameMode: GameMode) => {
   if (player.Attrs.role != 'admin') return
@@ -119,11 +118,6 @@ const Tp = (player: Player, args: any, gameMode: GameMode) => {
   }
 }
 
-const Restart = (player: Player, args: any, gameMode: GameMode) => {
-  if (player.Attrs.role != 'admin') return
-  RestartGamemode(gameMode)
-}
-
 const Whoami = (player: Player, args: any, gameMode: GameMode) => {
   if (player.Attrs.role != 'admin') return
   console.log(player.Npc.Uuid)
@@ -145,6 +139,11 @@ const CurrentPos = (player: Player, args: any, gamemode: GameMode) => {
   console.log(myPos)
 }
 
+const Login = (player: Player, args: any, gameMode: GameMode) => {
+  Client.RemoveHtmlComponent(player.Id, 'Overlay_Main')
+  Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#login`)
+}
+
 export default {
   Op,
   Deop,
@@ -154,6 +153,6 @@ export default {
   Whoami,
   CamCastle,
   CamPlayer,
-  Restart,
+  Login,
   CurrentPos,
 }

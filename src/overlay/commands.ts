@@ -17,7 +17,6 @@ import { UpdatePartyMemberOverlay } from './updater.js'
 
 const RequestStateHeroComponent = (player: Player, args: any, gamemode: GameMode) => {
   UpdateOverlayState<HeroPageState>(player, 'HeroComponent', {
-    lp: player.Attrs.learningPoints,
     hitpoints: player.Npc.GetAttribute(NPC_ATR_HITPOINTSMAX)!,
     mana: player.Npc.GetAttribute(NPC_ATR_MANAMAX)!,
     strength: player.Npc.GetAttribute(NPC_ATR_STRENGTH)!,

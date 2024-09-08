@@ -2,13 +2,6 @@ import { Player as CorePlayer } from 'gothic-together/player'
 import { store } from './store.js'
 
 export type PlayerAttributes = {
-  readonly learningPoints: number
-  readonly healTargetUuid: string
-  readonly totalDamageDealt: number
-  readonly waveDamageDealt: number
-  readonly totalWaveEnemyKills: number
-  readonly totalWavesSurvived: number
-  readonly reviveTimeStart: number
   readonly role: 'player' | 'admin'
 }
 
