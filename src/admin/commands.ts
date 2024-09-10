@@ -139,11 +139,6 @@ const CurrentPos = (player: Player, args: any, gamemode: GameMode) => {
   console.log(myPos)
 }
 
-const Login = (player: Player, args: any, gameMode: GameMode) => {
-  Client.RemoveHtmlComponent(player.Id, 'Overlay_Main')
-  Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#login`)
-}
-
 export default {
   Op,
   Deop,
@@ -153,6 +148,5 @@ export default {
   Whoami,
   CamCastle,
   CamPlayer,
-  Login,
   CurrentPos,
 }

@@ -84,6 +84,10 @@ export class GameMode extends GameModeBase {
     if (weapon) {
       UseItemFromInventory(player, weapon.objectName)
     }
+
+    Client.RemoveHtmlComponent(player.Id, 'Overlay_Main')
+    Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#login`)
+    Client.DisableClosingOverlay(player.Id)
   }
 
   override OnPlayerDisconnectServer(player: Player): void {

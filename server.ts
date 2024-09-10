@@ -9,6 +9,7 @@ import HeroCommands from 'src/hero/commands.js'
 import InventoryCommands from 'src/inventory/commands.js'
 import CreatorCommands from 'src/creator/commands.js'
 import OverlayCommands from 'src/overlay/commands.js'
+import LoginCommands from 'src/login/commands.js'
 
 console.log(`Node started in ${process.env['APP_ENV']} mode.`)
 
@@ -25,6 +26,7 @@ AddCommandHandlers({
   ...InventoryCommands,
   ...CreatorCommands,
   ...OverlayCommands,
+  ...LoginCommands,
 })
 
 StartGameMode()
