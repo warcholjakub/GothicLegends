@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createGlobalStyle, styled } from 'styled-components'
 import banner from './components/Login/banner.png'
 import logo from './components/Login/logo.png'
@@ -11,6 +11,35 @@ import { sendGameCommand, useGameState } from './lib/electron'
 function Login() {
   const [username, setUsername] = useState<string>()
   const [password, setPassword] = useState<string>()
+  const [rememberMe, setRememberMe] = useState<boolean>(false)
+
+  useEffect(() => {
+    const userStore = localStorage.getItem('username')
+    const passStore = localStorage.getItem('password')
+    const rememberMe = localStorage.getItem('rememberMe')
+    if (rememberMe === 'true') {
+      setRememberMe(true)
+    }
+    if (userStore && rememberMe === 'true') {
+      setUsername(userStore)
+    }
+    if (passStore && rememberMe === 'true') {
+      setPassword(passStore)
+    }
+  }, [])
+
+  const saveLoginData = () => {
+    if (rememberMe) {
+      localStorage.setItem('username', username!)
+      localStorage.setItem('password', password!)
+      localStorage.setItem('rememberMe', 'true')
+    } else {
+      localStorage.removeItem('username')
+      localStorage.removeItem('password')
+      localStorage.removeItem('rememberMe')
+    }
+  }
+
   return (
     <PageWrapper>
       <GlobalStyle />
@@ -19,16 +48,29 @@ function Login() {
         <Logo />
         <Banner2 />
         <Text1>Login</Text1>
-        <Input1 placeholder="Login" onChange={(e) => setUsername(e.target.value)} />
+        <Input1
+          placeholder="Login"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
         <Text1>Hasło</Text1>
-        <PasswordInput placeholder="Hasło" onChange={(e) => setPassword(e.target.value)} />
+        <PasswordInput
+          placeholder="Hasło"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <CheckboxWrapper>
-          <Checkbox />
+          <Checkbox checked={rememberMe} onChange={() => setRememberMe(!rememberMe)}></Checkbox>
           <Text2>Zapamiętaj login i hasło</Text2>
         </CheckboxWrapper>
         <LoginButton
           onClick={() => {
-            sendGameCommand('LoginAttempt', { username: username, password: password })
+            saveLoginData()
+            sendGameCommand('LoginAttempt', {
+              username: username,
+              password: password,
+              rme: rememberMe,
+            })
           }}
         >
           Zaloguj
@@ -84,23 +126,26 @@ const Logo = styled.div`
   background: url(${logo}) -4.71vw -9.36vh / 158.73% 269.058% no-repeat;
   margin-bottom: 2.96vh; /* 32px / 1080 * 100 */
   margin-top: -1vh;
+  object-fit: contain;
 `
 
 const Banner1 = styled.div`
-  width: 4.17vw; /* 80.103px / 1920 * 100 */
-  left: 1.42vw;
-  height: 11.85vh; /* 128px / 1080 * 100 */
+  width: 4.17vw;
+  left: 1.42vw; /* 1.42 vw */
+  height: auto;
+  aspect-ratio: 0.625; /* Maintain aspect ratio (80.103 / 128 ≈ 0.625) */
   position: absolute;
-  background: url(${banner}) 50% / cover no-repeat;
+  background: url(${banner}) 50% / contain no-repeat;
   margin-top: -5.93vh; /* -64px / 1080 * 100 */
 `
 
 const Banner2 = styled.div`
-  width: 4.17vw; /* 80.103px / 1920 * 100 */
-  right: 1.44vw; /* 27.632px / 1920 * 100 */
-  height: 11.85vh; /* 128px / 1080 * 100 */
+  width: 4.17vw;
+  right: 1.44vw; /* 1.44 vw */
+  height: auto;
+  aspect-ratio: 0.625; /* Maintain aspect ratio (80.103 / 128 ≈ 0.625) */
   position: absolute;
-  background: url(${banner}) 50% / cover no-repeat;
+  background: url(${banner}) 50% / contain no-repeat;
   margin-top: -5.93vh; /* -64px / 1080 * 100 */
 `
 

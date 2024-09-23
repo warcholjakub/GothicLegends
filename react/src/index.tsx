@@ -9,6 +9,7 @@ import EquipmentPage from './Equipment'
 import HeroPage from './Hero'
 import Creator from './Creator'
 import Login from './Login'
+import CharacterSelector from './CharacterSelector'
 import { WebBrowserWrapper } from './components/WebBrowserWrapper'
 
 const isWebBrowser = ConfigureBrowserIfNotInsideGame()
@@ -24,6 +25,7 @@ root.render(
         <Route path="/stats" element={<Stats />} />
         <Route path="/creator" element={<Creator />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/characterSelector" element={<CharacterSelector />} />
       </Routes>
     </Router>
   </WebBrowserWrapper>,

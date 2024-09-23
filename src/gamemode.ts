@@ -38,12 +38,6 @@ export class GameMode extends GameModeBase {
 
     Client.BindCommandToKeyPress(player.Id, 0x70, 'menu', BindCommandType.OVERLAY_TOGGLE)
 
-    Client.LoadHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#eq`)
-    Client.CreateHtmlComponent(player.Id, 'Main')
-
-    Client.LoadHtmlComponent(player.Id, 'Overlay_Main', `${REACT_BASE_URL}#stats`)
-    Client.CreateHtmlComponent(player.Id, 'Overlay_Main')
-
     InitPlayerInventory(player)
     AddItemToInventory(player, {
       isNative: true,
@@ -85,9 +79,14 @@ export class GameMode extends GameModeBase {
       UseItemFromInventory(player, weapon.objectName)
     }
 
-    Client.RemoveHtmlComponent(player.Id, 'Overlay_Main')
+    Client.LoadHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#login`)
+    Client.CreateHtmlComponent(player.Id, 'Main')
     Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#login`)
     Client.DisableClosingOverlay(player.Id)
+
+    // Client.LoadHtmlComponent(player.Id, 'Overlay_Main', `${REACT_BASE_URL}#stats`)
+    // Client.CreateHtmlComponent(player.Id, 'Overlay_Main')
+    // Client.StopIntercept(player.Id)
   }
 
   override OnPlayerDisconnectServer(player: Player): void {
