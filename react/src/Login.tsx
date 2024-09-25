@@ -5,6 +5,7 @@ import logo from './components/Login/logo.png'
 import bg1 from './components/Login/login_bg1.png'
 import background from './components/Login/background.png'
 import Caudex from './fonts/Caudex-Regular.ttf'
+import bgWideo from './components/bgWideo.mp4'
 import { TooltipProvider } from './components/ui/tooltip'
 import { sendGameCommand, useGameState } from './lib/electron'
 
@@ -41,42 +42,49 @@ function Login() {
   }
 
   return (
-    <PageWrapper>
-      <GlobalStyle />
-      <LoginWindow>
-        <Banner1 />
-        <Logo />
-        <Banner2 />
-        <Text1>Login</Text1>
-        <Input1
-          placeholder="Login"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <Text1>Hasło</Text1>
-        <PasswordInput
-          placeholder="Hasło"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <CheckboxWrapper>
-          <Checkbox checked={rememberMe} onChange={() => setRememberMe(!rememberMe)}></Checkbox>
-          <Text2>Zapamiętaj login i hasło</Text2>
-        </CheckboxWrapper>
-        <LoginButton
-          onClick={() => {
-            saveLoginData()
-            sendGameCommand('LoginAttempt', {
-              username: username,
-              password: password,
-              rme: rememberMe,
-            })
-          }}
-        >
-          Zaloguj
-        </LoginButton>
-      </LoginWindow>
-    </PageWrapper>
+    <div className="main">
+      <VideoWrapper>
+        <video src={bgWideo} autoPlay muted loop>
+          Your browser does not support the video tag.
+        </video>
+      </VideoWrapper>
+      <PageWrapper>
+        <GlobalStyle />
+        <LoginWindow>
+          <Banner1 />
+          <Logo />
+          <Banner2 />
+          <Text1>Login</Text1>
+          <Input1
+            placeholder="Login"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <Text1>Hasło</Text1>
+          <PasswordInput
+            placeholder="Hasło"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <CheckboxWrapper>
+            <Checkbox checked={rememberMe} onChange={() => setRememberMe(!rememberMe)}></Checkbox>
+            <Text2>Zapamiętaj login i hasło</Text2>
+          </CheckboxWrapper>
+          <LoginButton
+            onClick={() => {
+              saveLoginData()
+              sendGameCommand('LoginAttempt', {
+                username: username,
+                password: password,
+                rme: rememberMe,
+              })
+            }}
+          >
+            Zaloguj
+          </LoginButton>
+        </LoginWindow>
+      </PageWrapper>
+    </div>
   )
 }
 
@@ -100,6 +108,21 @@ const PageWrapper = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
+`
+const VideoWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `
 
 const LoginWindow = styled.div`
