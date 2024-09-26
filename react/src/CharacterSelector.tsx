@@ -4,12 +4,13 @@ import Caudex from './fonts/Caudex-Regular.ttf'
 import slotBG from './components/CharacterSelector/slotBackground.png'
 import bgWideo from './components/bgWideo.mp4'
 import startGameButton from './components/CharacterSelector/startGameButton.png'
+import characterBackground from './components/CharacterSelector/characterBackground.png'
 import basicTexture from './components/CharacterSelector/basicTexture.png'
 import { TooltipProvider } from './components/ui/tooltip'
 import { sendGameCommand, useGameState } from './lib/electron'
 
 function isEmpty(obj: CharArgs) {
-  return JSON.stringify(obj) === '{}'
+  return JSON.stringify(obj) === '{}' || obj === undefined
 }
 
 type CharArgs = {
@@ -26,8 +27,8 @@ function CharacterSelector() {
   const [char4, setChar4] = useState<CharArgs>()
 
   useEffect(() => {
-    // const char1ToSave: CharArgs = { name: 'Maidenless Tarnished', sex: 0, age: 45, gameTime: 0 }
-    // localStorage.setItem('char1', JSON.stringify(char1ToSave))
+    const char1ToSave: CharArgs = { name: 'Maidenless Tarnished', sex: 0, age: 45, gameTime: 0 }
+    localStorage.setItem('char1', JSON.stringify(char1ToSave))
     setChar1(JSON.parse(localStorage.getItem('char1') || '{}'))
     setChar2(JSON.parse(localStorage.getItem('char2') || '{}'))
     setChar3(JSON.parse(localStorage.getItem('char3') || '{}'))
@@ -48,7 +49,15 @@ function CharacterSelector() {
         </Text1>
         <SlotsWrapper>
           {isEmpty(char1!) ? (
-            <EmptySlot />
+            <EmptySlot>
+              <CreateCharacterButton
+                onClick={() => {
+                  sendGameCommand('Creator', {
+                    slot: 1,
+                  })
+                }}
+              />
+            </EmptySlot>
           ) : (
             <CharacterSlot>
               <CharTitleText>Imię postaci</CharTitleText>
@@ -59,15 +68,23 @@ function CharacterSelector() {
               <CharText>{char1?.age} lat</CharText>
               <CharTitleText>Czas gry</CharTitleText>
               <CharText>
-                {Math.floor(char1!.gameTime / 86400)} d{' '}
-                {Math.floor((char1!.gameTime % 86400) / 3600)} hr{' '}
-                {Math.floor((char1!.gameTime % 3600) / 60)} min
+                {Math.floor((char1?.gameTime ?? 0) / 86400)} d{' '}
+                {Math.floor(((char1?.gameTime ?? 0) % 86400) / 3600)} hr{' '}
+                {Math.floor(((char1?.gameTime ?? 0) % 3600) / 60)} min
               </CharText>
               <StartGameButton />
             </CharacterSlot>
           )}
           {isEmpty(char2!) ? (
-            <EmptySlot />
+            <EmptySlot>
+              <CreateCharacterButton
+                onClick={() => {
+                  sendGameCommand('Creator', {
+                    slot: 2,
+                  })
+                }}
+              />
+            </EmptySlot>
           ) : (
             <CharacterSlot>
               <CharTitleText>Imię postaci</CharTitleText>
@@ -78,14 +95,22 @@ function CharacterSelector() {
               <CharText>{char2?.age} lat</CharText>
               <CharTitleText>Czas gry</CharTitleText>
               <CharText>
-                {Math.floor(char2!.gameTime / 86400)} d{' '}
-                {Math.floor((char2!.gameTime % 86400) / 3600)} hr{' '}
-                {Math.floor((char2!.gameTime % 3600) / 60)} min
+                {Math.floor((char2?.gameTime ?? 0) / 86400)} d{' '}
+                {Math.floor(((char2?.gameTime ?? 0) % 86400) / 3600)} hr{' '}
+                {Math.floor(((char2?.gameTime ?? 0) % 3600) / 60)} min
               </CharText>
             </CharacterSlot>
           )}
           {isEmpty(char3!) ? (
-            <EmptySlot />
+            <EmptySlot>
+              <CreateCharacterButton
+                onClick={() => {
+                  sendGameCommand('Creator', {
+                    slot: 3,
+                  })
+                }}
+              />
+            </EmptySlot>
           ) : (
             <CharacterSlot>
               <CharTitleText>Imię postaci</CharTitleText>
@@ -96,14 +121,22 @@ function CharacterSelector() {
               <CharText>{char3?.age} lat</CharText>
               <CharTitleText>Czas gry</CharTitleText>
               <CharText>
-                {Math.floor(char3!.gameTime / 86400)} d{' '}
-                {Math.floor((char3!.gameTime % 86400) / 3600)} hr{' '}
-                {Math.floor((char3!.gameTime % 3600) / 60)} min
+                {Math.floor((char3?.gameTime ?? 0) / 86400)} d{' '}
+                {Math.floor(((char3?.gameTime ?? 0) % 86400) / 3600)} hr{' '}
+                {Math.floor(((char3?.gameTime ?? 0) % 3600) / 60)} min
               </CharText>
             </CharacterSlot>
           )}
           {isEmpty(char4!) ? (
-            <EmptySlot />
+            <EmptySlot>
+              <CreateCharacterButton
+                onClick={() => {
+                  sendGameCommand('Creator', {
+                    slot: 4,
+                  })
+                }}
+              />
+            </EmptySlot>
           ) : (
             <CharacterSlot>
               <CharTitleText>Imię postaci</CharTitleText>
@@ -114,9 +147,9 @@ function CharacterSelector() {
               <CharText>{char4?.age} lat</CharText>
               <CharTitleText>Czas gry</CharTitleText>
               <CharText>
-                {Math.floor(char4!.gameTime / 86400)} d{' '}
-                {Math.floor((char4!.gameTime % 86400) / 3600)} hr{' '}
-                {Math.floor((char4!.gameTime % 3600) / 60)} min
+                {Math.floor((char4?.gameTime ?? 0) / 86400)} d{' '}
+                {Math.floor(((char4?.gameTime ?? 0) % 86400) / 3600)} hr{' '}
+                {Math.floor(((char4?.gameTime ?? 0) % 3600) / 60)} min
               </CharText>
             </CharacterSlot>
           )}
@@ -226,8 +259,8 @@ const CharacterSlot = styled.div`
   gap: 8px;
   border-radius: 12px;
   border: 2px solid #ffd390;
-  background: linear-gradient(rgba(255, 211, 144, 0), rgba(10, 10, 10, 0)), url(${basicTexture});
-  background-size: 350%;
+  background: linear-gradient(rgba(255, 211, 144, 0), rgba(10, 10, 10, 0)),
+    url(${characterBackground});
   margin: 0 16px;
 `
 
@@ -265,6 +298,12 @@ const StartGameButton = styled.button`
   border: none; /* Remove default button border */
   cursor: pointer; /* Change cursor to pointer on hover */
   margin-top: 16px;
+`
+
+const CreateCharacterButton = styled.button`
+  width: 80px;
+  height: 80px;
+  margin-top: -45px;
 `
 
 const SlotsWrapper = styled.div`

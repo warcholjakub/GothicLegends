@@ -1,15 +1,16 @@
-import { CreatorState } from 'react/src/Creator.js'
+import { CharacterCreatorState } from 'react/src/CharacterCreator.js'
 import { UpdateOverlayState } from 'src/utils/update-overlay-state.js'
 import { MyPlayer as Player } from '../player.js'
 import { GameMode, REACT_BASE_URL } from 'src/gamemode.js'
 import { Client, zVEC3 } from 'gothic-together'
 
 type CreatorArgs = {
+  slot: number
   currBodyVar: number
   gender: 0 | 1
   face: number
   faceShape: number
-  fatness: number
+  // fatness: number
 }
 
 const bodyTextVar = [
@@ -41,17 +42,17 @@ const faceShapeVar = [
 ]
 
 const CreatorUpdate = (player: Player, args: CreatorArgs, gamemode: GameMode) => {
-  const gender = args.gender || 0
-  const currBodyVar = args.currBodyVar || 0
-  const face = args.face || 0
-  const faceShape = args.faceShape || 0
-  const fatness = args.fatness || 0
+  const gender = args.gender
+  const currBodyVar = args.currBodyVar
+  const face = args.face
+  const faceShape = args.faceShape
+  // const fatness = args.fatness || 0
 
-  const playerModel = player.Npc.GetModel()
-  playerModel?.set_fatness(fatness)
+  // const playerModel = player.Npc.GetModel()
+  // playerModel?.set_fatness(fatness)
 
   player.Npc.SetAdditionalVisuals(
-    gender ? 'hum_body_Naked0' : 'hum_body_Babe0',
+    gender === 1 ? 'hum_body_Naked0' : 'hum_body_Babe0',
     bodyTextVar[gender]![currBodyVar]!, //MyBodyTextVarNr
     0, //DefaultBodyTexColorNr
     faceShapeVar[gender]![faceShape]!, //FaceShape
@@ -60,21 +61,19 @@ const CreatorUpdate = (player: Player, args: CreatorArgs, gamemode: GameMode) =>
     -1,
   )
 
-  UpdateOverlayState<CreatorState>(player, 'CreatorComponent', {
-    username: player.Name || '',
-    gender: gender,
-    currBodyVar: currBodyVar,
-    face: face,
-    faceShape: faceShape,
-    fatness: args.fatness,
-  })
+  // UpdateOverlayState<CreatorState>(player, 'CreatorComponent', {
+  //   gender: gender,
+  //   currBodyVar: currBodyVar,
+  //   face: face,
+  //   faceShape: faceShape,
+  //   // fatness: args.fatness,
+  // })
 }
 
-const Creator = (player: Player, args: CreatorArgs, gamemode: GameMode) => {
+const Creator = (player: Player, slot: number, gamemode: GameMode) => {
   const current_pos = player.Npc.GetPositionWorld()!
 
-  Client.RemoveHtmlComponent(player.Id, 'Overlay_Main')
-  Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#creator`)
+  Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#characterCreator`)
 
   const heading = new zVEC3([current_pos.X, current_pos.Y, current_pos.Z])
   player.Npc.SetHeadingWorld(new zVEC3([current_pos.X + 150, current_pos.Y, current_pos.Z]))
@@ -82,14 +81,17 @@ const Creator = (player: Player, args: CreatorArgs, gamemode: GameMode) => {
   current_pos.Y += 20
 
   Client.EnableStaticCamera(player.Id, current_pos, heading)
-  Client.DisableClosingOverlay(player.Id)
+
+  const test = 1
+
+  UpdateOverlayState<CharacterCreatorState>(player, 'CharacterCreatorComponent', { slot: test })
 }
 
 const ExitCreator = (player: Player, args: CreatorArgs, gamemode: GameMode) => {
   Client.EnableClosingOverlay(player.Id)
   Client.StopIntercept(player.Id)
   Client.DisableStaticCamera(player.Id)
-  Client.CreateHtmlComponent(player.Id, 'Overlay_Main')
+  // Client.CreateHtmlComponent(player.Id, 'Overlay_Main')
 }
 
 export default {

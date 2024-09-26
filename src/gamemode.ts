@@ -72,17 +72,19 @@ export class GameMode extends GameModeBase {
     player.Npc.SetAttribute(5, 300)
     player.Npc.SetGuild(1)
 
-    if (armor) {
-      UseItemFromInventory(player, armor.objectName)
-    }
-    if (weapon) {
-      UseItemFromInventory(player, weapon.objectName)
-    }
+    // if (armor) {
+    //   UseItemFromInventory(player, armor.objectName)
+    // }
+    // if (weapon) {
+    //   UseItemFromInventory(player, weapon.objectName)
+    // }
 
-    Client.LoadHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#login`)
-    Client.CreateHtmlComponent(player.Id, 'Main')
-    Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#login`)
-    Client.DisableClosingOverlay(player.Id)
+    if (player.Id != 0) {
+      Client.LoadHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#login`)
+      Client.CreateHtmlComponent(player.Id, 'Main')
+      Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#login`)
+      Client.DisableClosingOverlay(player.Id)
+    }
 
     // Client.LoadHtmlComponent(player.Id, 'Overlay_Main', `${REACT_BASE_URL}#stats`)
     // Client.CreateHtmlComponent(player.Id, 'Overlay_Main')
