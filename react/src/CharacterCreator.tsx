@@ -20,18 +20,23 @@ export type CharacterCreatorState = {
 
 function CharacterCreator() {
   const [error, setError] = useState<boolean>(false)
+  const [audioPlaying, setAudioPlaying] = useState<boolean>(false)
 
   const creatorState = useGameState<CharacterCreatorState>('CharacterCreatorComponent')
 
   let mroczneTajemnice = new Audio(audio)
-  mroczneTajemnice.play()
-  mroczneTajemnice.addEventListener(
-    'ended',
-    function () {
-      this.play()
-    },
-    false,
-  )
+  if (!audioPlaying) {
+    mroczneTajemnice.play()
+    setAudioPlaying(true)
+  }
+  // mroczneTajemnice.addEventListener(
+  //   'ended',
+  //   function () {
+  //     this.currentTime = 0
+  //     this.play()
+  //   },
+  //   false,
+  // )
 
   function AgeError(age: number, buttonClick: boolean) {
     if (age >= 18 && age <= 70) {
@@ -41,10 +46,8 @@ function CharacterCreator() {
     }
   }
 
-  function Update() {}
-
   const [name, setName] = useState<string>('')
-  const [age, setAge] = useState<number>(0)
+  const [age, setAge] = useState<number>(18)
   const [gender, setGender] = useState<number>(1)
 
   const [faceShape, setFaceShape] = useState<number>(1)
@@ -63,6 +66,14 @@ function CharacterCreator() {
       faceShape: faceShape - 1,
     })
   }, [gender, faceShape, faceTexture])
+
+  useEffect(() => {
+    if (age < 18 || age > 70) {
+      setError(true)
+    } else {
+      setError(false)
+    }
+  }, [age])
 
   return stage === 1 ? (
     <div className="main">
@@ -120,13 +131,10 @@ function CharacterCreator() {
               }}
             />
           </RowWrapper>
-          <ErrorMessage>
-            {(age < 18 || age > 70) && error ? 'Niepoprawny wiek postaci!' : ''}
-          </ErrorMessage>
+          <ErrorMessage>{error ? 'Niepoprawny wiek postaci!' : ''}</ErrorMessage>
           <ContinueButton
             src={Continue}
             onClick={() => {
-              AgeError(age, true)
               if (!error) {
                 setStage(2)
               }
