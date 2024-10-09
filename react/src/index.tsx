@@ -11,6 +11,7 @@ import Creator from './Creator'
 import Login from './Login'
 import CharacterSelector from './CharacterSelector'
 import CharacterCreator from './CharacterCreator'
+import Chat from './Chat'
 import { WebBrowserWrapper } from './components/WebBrowserWrapper'
 
 const isWebBrowser = ConfigureBrowserIfNotInsideGame()
@@ -28,6 +29,7 @@ root.render(
         <Route path="/login" element={<Login />} />
         <Route path="/characterSelector" element={<CharacterSelector />} />
         <Route path="/characterCreator" element={<CharacterCreator />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </Router>
   </WebBrowserWrapper>,

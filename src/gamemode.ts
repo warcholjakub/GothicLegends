@@ -80,9 +80,9 @@ export class GameMode extends GameModeBase {
     // }
 
     if (player.Id != 0) {
-      Client.LoadHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#login`)
+      Client.LoadHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#chat`)
       Client.CreateHtmlComponent(player.Id, 'Main')
-      Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#login`)
+      Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#chat`)
       Client.DisableClosingOverlay(player.Id)
     }
 

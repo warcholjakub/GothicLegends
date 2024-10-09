@@ -10,6 +10,7 @@ import InventoryCommands from 'src/inventory/commands.js'
 import CreatorCommands from 'src/creator/commands.js'
 import OverlayCommands from 'src/overlay/commands.js'
 import LoginCommands from 'src/login/commands.js'
+import ChatCommands from 'src/chat/commands.js'
 
 console.log(`Node started in ${process.env['APP_ENV']} mode.`)
 
@@ -27,6 +28,7 @@ AddCommandHandlers({
   ...CreatorCommands,
   ...OverlayCommands,
   ...LoginCommands,
+  ...ChatCommands,
 })
 
 StartGameMode()
