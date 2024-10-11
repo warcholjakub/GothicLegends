@@ -2,6 +2,13 @@ import { NPC_ATR_HITPOINTS, NPC_ATR_HITPOINTSMAX } from 'gothic-together/union/e
 import { MyPlayer as Player } from 'src/player.js'
 import { GameMode, REACT_BASE_URL } from 'src/gamemode.js'
 import { Client, zVEC3 } from 'gothic-together'
+import { UpdateOverlayState } from 'src/utils/update-overlay-state.js'
+
+type message = {
+  content: string
+  type: string
+  sender: string
+}
 
 const Op = (player: Player, args: any, gameMode: GameMode) => {
   if (player.Attrs.role != 'admin') return
@@ -121,6 +128,13 @@ const Tp = (player: Player, args: any, gameMode: GameMode) => {
 const Whoami = (player: Player, args: any, gameMode: GameMode) => {
   if (player.Attrs.role != 'admin') return
   console.log(player.Npc.Uuid)
+  const output: message = { content: player.Npc.Uuid, type: 'commandOutput', sender: 'Server' }
+  UpdateOverlayState<message>(player, 'newMessage', output)
+}
+
+const ListPlayers = (player: Player, args: any, gameMode: GameMode) => {
+  if (player.Attrs.role != 'admin') return
+  console.log(gameMode.Players.map((p) => p.Npc.Uuid))
 }
 
 const CamCastle = (player: Player, args: any, gamemode: GameMode) => {
@@ -149,4 +163,5 @@ export default {
   CamCastle,
   CamPlayer,
   CurrentPos,
+  ListPlayers,
 }
