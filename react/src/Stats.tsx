@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Notification } from './components/Notification'
-import styled from 'styled-components'
+import { createGlobalStyle, styled } from 'styled-components'
+import Caudex from './fonts/Caudex-Regular.ttf'
 import { Quest, QuestTitle, Quests } from './components/Quests'
 import { HeroBar } from './components/HeroBar'
 import HeroPage from './Hero'
@@ -9,6 +10,8 @@ import { QuestStatus } from './components/Quests'
 import { ProgressBar } from './components/ProgressBar'
 import { sendGameCommand, useGameState } from './lib/electron'
 import { onGameEvent } from './lib/electron'
+import statBarBg from './components/Stats/statBarBg.svg'
+import red from './components/Stats/red.jpeg'
 
 type PartyMember = {
   id?: number
@@ -66,106 +69,99 @@ const Stats = () => {
     })
   }, [])
 
-  if (!statsData) {
-    return null
-  }
+  // if (!statsData) {
+  //   return null
+  // }
 
   return (
-    <>
-      <Overlay>
-        <Column>
-          <PlayersWrapper>
-            <Players>
-              {statsData.partyMembers?.map((member) => (
-                <>
-                  {member.id == statsData.playerId ? (
-                    <Myself>
-                      <HeroBar
-                        type={'player'}
-                        avatar="https://cdn.discordapp.com/avatars/711289213357785206/39d04f6168d5520ccbe52686ed776910.webp?size=160"
-                        name={member.name!}
-                        level={member.level!}
-                        hp={member.currentHp!}
-                        mana={member.currentMana!}
-                      />
-                    </Myself>
-                  ) : (
-                    <HeroBar
-                      type="friend"
-                      avatar="https://cdn.discordapp.com/avatars/711289213357785206/39d04f6168d5520ccbe52686ed776910.webp?size=160"
-                      name={member.name!}
-                      level={member.level!}
-                      hp={member.currentHp!}
-                      mana={member.currentMana!}
-                    />
-                  )}
-                </>
-              ))}
-            </Players>
-          </PlayersWrapper>
-        </Column>
-        <Column>
-          <ProgressBar
-            icon={require('./components/ProgressBar/icon_leafs_128.png')}
-            isVisible={isProgressBarVisible}
-            time={5}
-            label={progressBarLabel}
-          />
-          {isNotificationVisible && (
-            <Notification title={notificationTitle} text={notificationText} />
-          )}
-        </Column>
-        <Column>
-          <QuestsWrapper>
-            <Quests>
-              <QuestTitle title="Aktualne zadania " />
-              <div>
-                {statsData.quests?.map((quest) => (
-                  <Quest key={quest.id!} title={quest.title!} status={quest.status!} />
-                ))}
-              </div>
-            </Quests>
-          </QuestsWrapper>
-        </Column>
-      </Overlay>
-    </>
+    <PageWrapper>
+      <GlobalStyle />
+      <BarWrapper>
+        <StatBar>
+          <StatBarFill></StatBarFill>
+          <CenteredText>{statsData?.playerHp}/100</CenteredText>
+        </StatBar>
+        <StatBar>
+          <BlueStatBarFill></BlueStatBarFill>
+          <CenteredText>{statsData?.playerHp}/100</CenteredText>
+        </StatBar>
+      </BarWrapper>
+    </PageWrapper>
   )
 }
 
 export default Stats
 
-const Overlay = styled.div`
+const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: 'Caudex';
+    src: url(${Caudex}) format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  body {
+    font-family: 'Caudex', sans-serif;
+  }
+`
+
+const PageWrapper = styled.div`
   display: flex;
-  flex-basis: 0;
-  width: 100%;
-  height: 100%;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 `
 
-const Column = styled.div`
-  flex-basis: inherit;
-  flex-grow: 1;
+const StatBar = styled.div`
+  width: 256px;
+  height: 19px;
+  flex-shrink: 0;
+  background-image: url(${statBarBg});
+  content-align: center;
+  position: relative;
 `
 
-const QuestsWrapper = styled.div`
-  margin-top: 40%;
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-`
-
-const PlayersWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
-`
-
-const Players = styled.div``
-
-const Myself = styled.div`
-  margin-bottom: 20px;
-  margin-left: 10px;
+const StatBarFill = styled.div`
+  width: 70%;
+  height: 13px;
+  background: url(${red});
+  clip-path: polygon(1.5% 0%, 100% 0%, 98.5% 100%, 0% 100%);
   position: absolute;
-  margin-top: 46%;
-  margin-left: 3rem;
+  top: 3px;
+  left: 3px;
+`
+const BlueStatBarFill = styled.div`
+  width: 70%;
+  height: 13px;
+  background:
+    linear-gradient(0deg, rgba(0, 0, 255, 0.4) 0%, rgba(0, 0, 255, 0.4) 100%),
+    url(${red}) lightgray 50% / cover no-repeat;
+  background-blend-mode: color, revert;
+  clip-path: polygon(1.5% 0%, 100% 0%, 98.5% 100%, 0% 100%);
+  position: absolute;
+  top: 3px;
+  left: 3px;
+`
+
+const CenteredText = styled.div`
+  position: absolute;
+  color: #fff;
+  font-family: Caudex;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  position: absolute; /* Position it absolutely within StatBar */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`
+
+const BarWrapper = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `
