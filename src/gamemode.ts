@@ -79,12 +79,10 @@ export class GameMode extends GameModeBase {
     //   UseItemFromInventory(player, weapon.objectName)
     // }
 
-    if (player.Id != 0) {
-      Client.LoadHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#chat`)
-      Client.CreateHtmlComponent(player.Id, 'Main')
-      Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#chat`)
-      Client.DisableClosingOverlay(player.Id)
-    }
+    Client.LoadHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#chat`)
+    Client.CreateHtmlComponent(player.Id, 'Main')
+    Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#chat`)
+    Client.DisableClosingOverlay(player.Id)
 
     // Client.LoadHtmlComponent(player.Id, 'Overlay_Main', `${REACT_BASE_URL}#stats`)
     // Client.CreateHtmlComponent(player.Id, 'Overlay_Main')

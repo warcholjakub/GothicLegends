@@ -153,6 +153,28 @@ const CurrentPos = (player: Player, args: any, gamemode: GameMode) => {
   console.log(myPos)
 }
 
+const Spectate = (player: Player, args: any, gamemode: GameMode) => {
+  if (player.Attrs.role != 'admin') return
+  const cmdArgs = args.split(/(\s+)/).filter((e: string) => e.trim().length > 0)
+  if (cmdArgs.length != 1) {
+    return
+  }
+  let chosenPlayer = null
+  for (const p of gamemode.Players) {
+    if (p.Npc.Uuid == cmdArgs[0]) {
+      chosenPlayer = p
+      break
+    }
+  }
+
+  if (chosenPlayer) {
+    const playerPos = chosenPlayer.Npc.GetPositionWorld() || new zVEC3([0, 0, 0])
+    const playerHeading = playerPos
+    playerHeading.X -= 200
+    Client.EnableStaticCamera(player.Id, playerPos, playerHeading)
+  }
+}
+
 export default {
   Op,
   Deop,
@@ -164,4 +186,5 @@ export default {
   CamPlayer,
   CurrentPos,
   ListPlayers,
+  Spectate,
 }

@@ -29,8 +29,8 @@ const sendMessage = (player: Player, args: message | string, gameMode: GameMode)
   if (typeof args === 'string') {
     args = { content: args, type: 'normal', sender: '' }
   }
-  console.log(args.content)
-  args.sender = player.Name
+  // if (args.content === '') return
+  args.sender = `(${player.Id}) ${player.Name}`
   let range = normalRange
 
   if (args.content[0] === '/') {
@@ -40,40 +40,34 @@ const sendMessage = (player: Player, args: message | string, gameMode: GameMode)
 
     switch (commandName) {
       case 'me':
-        args.type = 'me'
-        args.content = commandArgs
+        args.content = `#${commandArgs}#`
         break
       case 'do':
-        args.type = 'do'
-        args.content = commandArgs
+        args.content = `*${commandArgs}*`
         break
       case 'gdo':
-        args.type = 'gdo'
         args.content = commandArgs
         gameMode.Players.forEach((p) => {
           UpdateOverlayState<message>(p, 'newMessage', args)
         })
         return
       case 'sz':
-        args.type = 'whisper'
-        args.content = commandArgs
+        range = whisperRange
         break
       case 'k':
-        args.type = 'shout'
-        args.content = commandArgs
+        range = normalRange * 2
         break
       case 'pw': {
         const targetPlayerName = commandParts[1]
         const targetPlayer = gameMode.Players.find((p) => p.Name === targetPlayerName)
         if (targetPlayer) {
           args.content = commandParts.slice(2).join(' ')
-          args.type = 'pw'
           args.sender = `${player.Name} -> ${targetPlayerName}`
           UpdateOverlayState<message>(targetPlayer, 'newMessage', args)
         } else {
           args.content = 'Player not found'
           args.sender = 'Server'
-          args.type = 'error'
+          args.type = 'ERROR'
         }
         UpdateOverlayState<message>(player, 'newMessage', args)
         return
@@ -82,20 +76,11 @@ const sendMessage = (player: Player, args: message | string, gameMode: GameMode)
         if (!CallCommand(commandName || '', player, commandArgs, gameMode)) {
           args.content = 'Command not found'
           args.sender = 'Server'
-          args.type = 'error'
+          args.type = 'ERROR'
           UpdateOverlayState<message>(player, 'newMessage', args)
         }
         return
     }
-  }
-
-  switch (args.type) {
-    case 'whisper':
-      range = whisperRange
-      break
-    case 'shout':
-      range = normalRange * 2
-      break
   }
 
   gameMode.Players.forEach((p) => {
