@@ -11,7 +11,7 @@ export const chatWithNPC = async (
 ) => {
   const openai = new OpenAI({
     baseURL: 'https://openrouter.ai/api/v1',
-    apiKey: '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',
+    apiKey: '',
     defaultHeaders: {},
   })
 
