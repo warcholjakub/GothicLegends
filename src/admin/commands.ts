@@ -175,6 +175,12 @@ const Spectate = (player: Player, args: any, gamemode: GameMode) => {
   }
 }
 
+const Kick = (player: Player, args: any, gamemode: GameMode) => {
+  if (player.Attrs.role != 'admin') return
+  const cmdArgs = args.split(/(\s+)/).filter((e: string) => e.trim().length > 0)
+  if (cmdArgs != 1) return
+}
+
 export default {
   Op,
   Deop,
@@ -187,4 +193,5 @@ export default {
   CurrentPos,
   ListPlayers,
   Spectate,
+  Kick,
 }

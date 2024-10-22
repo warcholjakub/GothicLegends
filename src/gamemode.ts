@@ -2,6 +2,7 @@
 import { Server, Client, GameModeBase, zVEC3 } from 'gothic-together'
 import { BindCommandType } from 'gothic-together/client-commands'
 import {
+  oCMobInter,
   // NPC_ATR_HITPOINTS,
   // TMovementSubType,
   // oCItem,
@@ -18,6 +19,7 @@ import { GameState, store } from './store.js'
 import { UpdateOverlayState } from './utils/update-overlay-state.js'
 import { StatsState } from 'react/src/Stats.js'
 import { UpdatePartyMemberOverlay, UpdateQuestOverlay } from './overlay/updater.js'
+import { Player, Player } from 'gothic-together/player'
 
 export const REACT_BASE_URL = process.env['FRONTEND_URL']
 
@@ -36,7 +38,9 @@ export class GameMode extends GameModeBase {
     UpdatePartyMemberOverlay(this)
     UpdateQuestOverlay(this, player)
 
-    Client.BindCommandToKeyPress(player.Id, 0x70, 'menu', BindCommandType.OVERLAY_TOGGLE)
+    // Client.BindCommandToKeyPress(player.Id, 0x70, 'menu', BindCommandType.OVERLAY_TOGGLE)
+    Client.BindCommandToKeyPress(player.Id, 0x71, 'focusChat', BindCommandType.OVERLAY_TOGGLE)
+    Client.BindCommandToKeyPress(player.Id, 0x72, 'unfocusChat', BindCommandType.OVERLAY_TOGGLE)
 
     InitPlayerInventory(player)
     AddItemToInventory(player, {
@@ -72,6 +76,8 @@ export class GameMode extends GameModeBase {
     player.Npc.SetAttribute(5, 300)
     player.Npc.SetGuild(1)
 
+    // Server.CreateNpc('HUMANS_S1', new zVEC3([1306, 247, 220]))
+
     // if (armor) {
     //   UseItemFromInventory(player, armor.objectName)
     // }
@@ -79,14 +85,16 @@ export class GameMode extends GameModeBase {
     //   UseItemFromInventory(player, weapon.objectName)
     // }
 
-    Client.LoadHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#chat`)
-    Client.CreateHtmlComponent(player.Id, 'Main')
-    Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#chat`)
-    Client.DisableClosingOverlay(player.Id)
+    // if (player.Id != 0) {
+    //   Client.LoadHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#chat`)
+    //   Client.CreateHtmlComponent(player.Id, 'Main')
+    //   Client.NavigateHtmlComponent(player.Id, 'Main', `${REACT_BASE_URL}#chat`)
+    //   Client.StopIntercept(player.Id)
+    // }
+    // Client.DisableClosingOverlay(player.Id)
 
     // Client.LoadHtmlComponent(player.Id, 'Overlay_Main', `${REACT_BASE_URL}#stats`)
     // Client.CreateHtmlComponent(player.Id, 'Overlay_Main')
-    // Client.StopIntercept(player.Id)
   }
 
   override OnPlayerDisconnectServer(player: Player): void {
@@ -121,6 +129,8 @@ export class GameMode extends GameModeBase {
   }
 
   override OnTick() {}
+
+  override OnPlayerNpcInteract(player: Player, npc: oCNpc, npcName: string): boolean | void {}
 
   override OnPlayerChangeAttribute(
     player: Player,

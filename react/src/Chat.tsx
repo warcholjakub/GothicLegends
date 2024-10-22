@@ -60,6 +60,7 @@ function Chat() {
   const formatMessageContent = (content: string) => {
     const regexMe = /#\s*(.*?)\s*#/g
     const regexDo = /\*\s*(.*?)\s*\*/g
+    const regexGDo = /\$\s*(.*?)\s*\$/g
     const parts = content.split(/(#.*?#|\*.*?\*)/g)
     return parts.map((part, index) => {
       if (regexMe.test(part)) {
@@ -72,6 +73,12 @@ function Chat() {
         return (
           <Message style={{ color: '#0f6bff' }} key={index}>
             {part.replace(/\*/g, '')}
+          </Message>
+        )
+      } else if (regexGDo.test(part)) {
+        return (
+          <Message style={{ color: '#ff4747' }} key={index}>
+            {part.replace(/\$/g, '')}
           </Message>
         )
       } else {
@@ -111,7 +118,7 @@ function Chat() {
             (msg, index) =>
               msg.type === activeSection && (
                 <Message key={index}>
-                  <MessageSender>{msg.sender}:</MessageSender> {formatMessageContent(msg.content)}
+                  <MessageSender>{msg.sender}</MessageSender> {formatMessageContent(msg.content)}
                 </Message>
               ),
           )}

@@ -58,9 +58,14 @@ const StopIntercept = (player: Player, args: any, gamemode: GameMode) => {
   Client.StopIntercept(player.Id)
 }
 
+const StartIntercept = (player: Player, args: any, gamemode: GameMode) => {
+  Client.StartIntercept(player.Id)
+}
+
 export default {
   RequestStateHeroComponent,
   RequestStateStatsComponent,
   RequestStateCreatorComponent,
   StopIntercept,
+  StartIntercept,
 }
